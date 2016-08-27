@@ -183,7 +183,7 @@ class Channel0(object):
         :rtype: dict
         """
         return {
-            'product': 'AMQP-Storm',
+            'product': 'AMQPStorm',
             'platform': 'Python %s (%s)' % (platform.python_version(),
                                             platform.python_implementation()),
             'capabilities': {

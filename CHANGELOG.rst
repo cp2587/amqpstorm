@@ -1,6 +1,11 @@
 Changelog
 -------------
 
+Version 2.1.0
+-------------
+- Added Management Api.
+    A complete Management Api that can be used for Testing or DevOps tasks.
+
 Version 2.0.0
 -------------
 - Messages are now delivered as Message objects by default.
