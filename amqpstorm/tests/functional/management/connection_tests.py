@@ -43,9 +43,9 @@ class ApiConnectionFunctionalTests(unittest.TestCase):
 
     def test_api_connection_close(self):
         reason = 'travis-ci'
-        api = ManagementApi(HTTP_URL, USERNAME, PASSWORD, timeout=1)
+        api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
-        connection = Connection(HOST, USERNAME, PASSWORD)
+        connection = Connection(HOST, USERNAME, PASSWORD, timeout=1)
         self.assertEqual(len(api.connection.list()), 1)
 
         for conn in api.connection.list():
