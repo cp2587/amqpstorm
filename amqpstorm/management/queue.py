@@ -18,6 +18,9 @@ class Queue(ManagementHandler):
 
         :param queue: Queue name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.get(
@@ -30,7 +33,10 @@ class Queue(ManagementHandler):
     def list(self, show_all=False):
         """List Queues.
 
-        :param bool show_all: List all Queues.
+        :param bool show_all: List all Queues
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -49,6 +55,9 @@ class Queue(ManagementHandler):
         :param bool durable: Durable queue
         :param bool auto_delete: Automatically delete when not in use
         :param dict arguments: Queue key/value arguments
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
@@ -71,6 +80,9 @@ class Queue(ManagementHandler):
 
         :param str queue: Queue name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.delete(API_QUEUE %
@@ -84,6 +96,9 @@ class Queue(ManagementHandler):
 
         :param str queue: Queue name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: None
         """
         return self.config.http_client.delete(API_QUEUE_PURGE %
@@ -96,6 +111,9 @@ class Queue(ManagementHandler):
         """Get Queue bindings.
 
         :param str queue: Queue name
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -112,6 +130,9 @@ class Queue(ManagementHandler):
         :param str exchange: Exchange name
         :param str routing_key: The routing key to use
         :param dict arguments: Bind key/value arguments
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """
@@ -138,6 +159,9 @@ class Queue(ManagementHandler):
         :param str exchange: Exchange name
         :param str routing_key: The routing key to use
         :param str properties_key:
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """

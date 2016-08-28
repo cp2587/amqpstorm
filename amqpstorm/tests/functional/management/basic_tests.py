@@ -18,9 +18,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiBasicFunctionalTests(unittest.TestCase):
-    def test_api_publish(self):
+    def test_api_basic_publish(self):
         message = str(uuid.uuid4())
-        queue = 'test_api_publish'
+        queue = 'test_api_basic_publish'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
@@ -31,9 +31,9 @@ class ApiBasicFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue)
 
-    def test_api_get_message(self):
+    def test_api_basic_get_message(self):
         message = str(uuid.uuid4())
-        queue = 'test_api_get_message'
+        queue = 'test_api_basic_get_message'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
@@ -50,9 +50,9 @@ class ApiBasicFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue)
 
-    def test_api_get_message_to_dict(self):
+    def test_api_basic_get_message_to_dict(self):
         message = str(uuid.uuid4())
-        queue = 'test_api_get_message'
+        queue = 'test_api_basic_get_message'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 

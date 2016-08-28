@@ -16,14 +16,14 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiUserFunctionalTests(unittest.TestCase):
-    def test_user_get(self):
+    def test_api_virtual_host_get(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         virtual_host = api.virtual_host.get('/')
         self.assertIsInstance(virtual_host, dict)
         self.assertEqual(virtual_host['name'], '/')
 
-    def test_user_list(self):
+    def test_api_virtual_host_list(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         virtual_hosts = api.virtual_host.list()
@@ -34,8 +34,8 @@ class ApiUserFunctionalTests(unittest.TestCase):
             self.assertIsInstance(vhost, dict)
             self.assertIn('name', vhost)
 
-    def test_user_create(self):
-        vhost_name = 'test_user_create'
+    def test_api_virtual_host_create(self):
+        vhost_name = 'test_api_virtual_host_create'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         try:
@@ -43,10 +43,14 @@ class ApiUserFunctionalTests(unittest.TestCase):
             virtual_host = api.virtual_host.get(vhost_name)
             self.assertIsInstance(virtual_host, dict)
             self.assertEqual(virtual_host['name'], vhost_name)
+            
+            api.config.set_virtual_host(vhost_name)
+
+            api.user.set_permission('guest')
         finally:
             api.virtual_host.delete(vhost_name)
 
-    def test_user_permissions(self):
+    def test_api_virtual_host_permissions(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         permissions = api.virtual_host.get_permissions('/')

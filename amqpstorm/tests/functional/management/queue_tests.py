@@ -17,8 +17,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiQueueFunctionalTests(unittest.TestCase):
-    def test_queue_get(self):
-        queue_name = 'test_queue_get'
+    def test_api_queue_get(self):
+        queue_name = 'test_api_queue_get'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
         try:
             api.queue.declare(queue_name)
@@ -27,13 +27,12 @@ class ApiQueueFunctionalTests(unittest.TestCase):
 
             self.assertIsInstance(queue, dict)
             self.assertIn('name', queue)
-            self.assertIn('consumers', queue)
             self.assertIn('auto_delete', queue)
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_list(self):
-        queue_name = 'test_queue_list'
+    def test_api_queue_list(self):
+        queue_name = 'test_api_queue_list'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         try:
@@ -52,8 +51,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_list_all(self):
-        queue_name = 'test_queue_list_all'
+    def test_api_queue_list_all(self):
+        queue_name = 'test_api_queue_list_all'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         try:
@@ -72,8 +71,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_declare(self):
-        queue_name = 'test_queue_declare'
+    def test_api_queue_declare(self):
+        queue_name = 'test_api_queue_declare'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
         try:
@@ -87,8 +86,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_declare_passive(self):
-        queue = 'test_queue_declare_passive'
+    def test_api_queue_declare_passive(self):
+        queue = 'test_api_queue_declare_passive'
 
         expected_error_message = (
             'NOT-FOUND - The client attempted to work '
@@ -104,8 +103,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
             self.assertEqual(why.error_type, 'NOT-FOUND')
             self.assertEqual(why.error_code, 404)
 
-    def test_queue_delete(self):
-        queue_name = 'test_queue_delete'
+    def test_api_queue_delete(self):
+        queue_name = 'test_api_queue_delete'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
         try:
             api.queue.declare(queue_name, durable=True)
@@ -118,8 +117,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         except ApiError as why:
             self.assertEqual(why.error_code, 404)
 
-    def test_queue_purge(self):
-        queue_name = 'test_queue_purge'
+    def test_api_queue_purge(self):
+        queue_name = 'test_api_queue_purge'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
         try:
@@ -128,8 +127,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_bind(self):
-        queue_name = 'test_queue_bind'
+    def test_api_queue_bind(self):
+        queue_name = 'test_api_queue_bind'
         exchange_name = 'amq.direct'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
@@ -147,8 +146,8 @@ class ApiQueueFunctionalTests(unittest.TestCase):
         finally:
             api.queue.delete(queue_name)
 
-    def test_queue_unbind(self):
-        queue_name = 'test_queue_bind'
+    def test_api_queue_unbind(self):
+        queue_name = 'test_api_queue_bind'
         exchange_name = 'amq.direct'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)

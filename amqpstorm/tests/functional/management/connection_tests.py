@@ -19,7 +19,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiConnectionFunctionalTests(unittest.TestCase):
-    def test_connection_get(self):
+    def test_api_connection_get(self):
         connection = Connection(HOST, USERNAME, PASSWORD)
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
@@ -29,7 +29,7 @@ class ApiConnectionFunctionalTests(unittest.TestCase):
 
         connection.close()
 
-    def test_connection_list(self):
+    def test_api_connection_list(self):
         connection = Connection(HOST, USERNAME, PASSWORD)
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
@@ -40,7 +40,7 @@ class ApiConnectionFunctionalTests(unittest.TestCase):
 
         connection.close()
 
-    def test_connection_close(self):
+    def test_api_connection_close(self):
         reason = 'travis-ci'
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 

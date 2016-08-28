@@ -7,6 +7,7 @@ from amqpstorm.management import ManagementApi
 
 
 class FakeClient(object):
+    """Fake HTTP client for Unit-Testing."""
     def __init__(self, on_get):
         self.on_get = on_get
 

@@ -17,12 +17,12 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiExchangeFunctionalTests(unittest.TestCase):
-    def test_exchange_get(self):
+    def test_api_exchange_get(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         self.assertIsInstance(api.exchange.get('amq.direct'), dict)
 
-    def test_exchange_list(self):
+    def test_api_exchange_list(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         exchanges = api.exchange.list()
@@ -36,7 +36,7 @@ class ApiExchangeFunctionalTests(unittest.TestCase):
             self.assertIn('type', exchange)
             self.assertIn('auto_delete', exchange)
 
-    def test_exchange_list_all(self):
+    def test_api_exchange_list_all(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
         exchanges = api.exchange.list(show_all=True)
@@ -50,8 +50,8 @@ class ApiExchangeFunctionalTests(unittest.TestCase):
             self.assertIn('type', exchange)
             self.assertIn('auto_delete', exchange)
 
-    def test_exchange_declare(self):
-        exchange = 'test_exchange_declare'
+    def test_api_exchange_declare(self):
+        exchange = 'test_api_exchange_declare'
         exchange_type = 'direct'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
@@ -69,7 +69,7 @@ class ApiExchangeFunctionalTests(unittest.TestCase):
         finally:
             api.exchange.delete(exchange)
 
-    def test_exchange_declare_passive(self):
+    def test_api_exchange_declare_passive(self):
         exchange = 'test_queue_declare_passive'
 
         expected_error_message = (
@@ -86,7 +86,7 @@ class ApiExchangeFunctionalTests(unittest.TestCase):
             self.assertEqual(why.error_type, 'NOT-FOUND')
             self.assertEqual(why.error_code, 404)
 
-    def test_exchange_bind_and_unbind(self):
+    def test_api_exchange_bind_and_unbind(self):
         source_name = 'amq.match'
         destination_name = 'amq.direct'
         routing_key = 'travis-ci'

@@ -51,18 +51,19 @@ class User(ManagementHandler):
         """
         return self.config.http_client.delete(API_USER % username)
 
-    def get_permission(self, username, virtual_host):
-        """Get a User permissions for a specific virtual host.
+    def get_permission(self, username):
+        """Get User permissions for the configured virtual host.
 
         :param str username: Username
-        :param str virtual_host: Virtual host
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
-        virtual_host = quote(virtual_host, '')
         return self.config.http_client.get(API_USER_VIRTUAL_HOST_PERMISSIONS %
                                            (
-                                               virtual_host,
+                                               self.config.virtual_host,
                                                username
                                            ))
 
@@ -71,6 +72,9 @@ class User(ManagementHandler):
 
         :param str username: Username
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.get(API_USER_PERMISSIONS %
@@ -78,18 +82,20 @@ class User(ManagementHandler):
                                                username
                                            ))
 
-    def set_permission(self, username, virtual_host, configure_regex='.*',
+    def set_permission(self, username, configure_regex='.*',
                        write_regex='.*', read_regex='.*'):
-        """Set a Users permissions.
+        """Set User permissions for the configured virtual host.
 
         :param str username: Username
-        :param str virtual_host: Virtual host
-        :param str configure_regex: Permission pattern for configuration 
+        :param str configure_regex: Permission pattern for configuration
                                     operations for this user.
         :param str write_regex: Permission pattern for write operations 
                                 for this user.
         :param str read_regex: Permission pattern for read operations 
                                for this user.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
@@ -100,21 +106,23 @@ class User(ManagementHandler):
         })
         return self.config.http_client.put(API_USER_VIRTUAL_HOST_PERMISSIONS %
                                            (
-                                               virtual_host,
+                                               self.config.virtual_host,
                                                username
                                            ), payload=permission_payload)
 
-    def delete_permission(self, username, virtual_host):
-        """Delete a Users permissions.
+    def delete_permission(self, username):
+        """Delete User permissions for the configured virtual host.
 
         :param str username: Username
-        :param str virtual_host: Virtual host
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
         return self.config.http_client.delete(
             API_USER_VIRTUAL_HOST_PERMISSIONS %
             (
-                virtual_host,
+                self.config.virtual_host,
                 username
             ))

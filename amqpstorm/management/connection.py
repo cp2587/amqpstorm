@@ -13,12 +13,18 @@ class Connection(ManagementHandler):
 
         :param str connection: Connection name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.get(API_CONNECTION % connection)
 
     def list(self):
         """Get Connections.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -29,6 +35,9 @@ class Connection(ManagementHandler):
 
         :param str connection: Connection name
         :param str reason: Reason for closing connection.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """

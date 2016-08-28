@@ -12,6 +12,9 @@ class VirtualHost(ManagementHandler):
 
         :param str virtual_host: Virtual host name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
@@ -19,6 +22,9 @@ class VirtualHost(ManagementHandler):
 
     def list(self):
         """List all Virtual Hosts.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -28,6 +34,9 @@ class VirtualHost(ManagementHandler):
         """Create a Virtual Host.
 
         :param str virtual_host: Virtual host name
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
@@ -39,6 +48,9 @@ class VirtualHost(ManagementHandler):
 
         :param str virtual_host: Virtual host name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
@@ -46,6 +58,9 @@ class VirtualHost(ManagementHandler):
 
     def get_permissions(self, virtual_host):
         """Get all Virtual hosts permissions.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """

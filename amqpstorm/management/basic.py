@@ -20,6 +20,9 @@ class Basic(ManagementHandler):
         :param dict properties: Message properties
         :param str payload_encoding: Payload encoding.
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         exchange = quote(exchange, '')
@@ -51,6 +54,9 @@ class Basic(ManagementHandler):
         :param int truncate: The maximum length in bytes, beyond that the
                              server will truncate the message.
         :param str encoding: Message encoding.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """

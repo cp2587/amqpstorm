@@ -17,6 +17,9 @@ class Exchange(ManagementHandler):
 
         :param str exchange: Exchange name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.get(
@@ -29,7 +32,10 @@ class Exchange(ManagementHandler):
     def list(self, show_all=False):
         """List Exchanges.
 
-        :param bool show_all: List all Exchanges.
+        :param bool show_all: List all Exchanges
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -49,6 +55,9 @@ class Exchange(ManagementHandler):
         :param bool durable: Durable exchange
         :param bool auto_delete: Automatically delete when not in use
         :param dict arguments: Exchange key/value arguments
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """
@@ -76,6 +85,9 @@ class Exchange(ManagementHandler):
 
         :param str exchange: Exchange name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.delete(API_EXCHANGE %
@@ -88,6 +100,9 @@ class Exchange(ManagementHandler):
         """Get Exchange bindings.
 
         :param str exchange: Exchange name
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
@@ -104,6 +119,9 @@ class Exchange(ManagementHandler):
         :param str destination: Destination Exchange name
         :param str routing_key: The routing key to use
         :param dict arguments: Bind key/value arguments
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """
@@ -130,6 +148,9 @@ class Exchange(ManagementHandler):
         :param str destination: Destination Exchange name
         :param str routing_key: The routing key to use
         :param str properties_key:
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """

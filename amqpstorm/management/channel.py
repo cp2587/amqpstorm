@@ -10,12 +10,18 @@ class Channel(ManagementHandler):
 
         :param channel: Channel name
 
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :rtype: dict
         """
         return self.config.http_client.get(API_CHANNEL % channel)
 
     def list(self):
         """List all Channels.
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """

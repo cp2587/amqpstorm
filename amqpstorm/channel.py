@@ -62,7 +62,7 @@ class Channel(BaseChannel):
     def basic(self):
         """RabbitMQ Basic Operations.
 
-        :rtype: Basic
+        :rtype: amqpstorm.basic.Basic
         """
         return self._basic
 
@@ -70,7 +70,7 @@ class Channel(BaseChannel):
     def exchange(self):
         """RabbitMQ Exchange Operations.
 
-        :rtype: Exchange
+        :rtype: amqpstorm.exchange.Exchange
         """
         return self._exchange
 
@@ -78,7 +78,7 @@ class Channel(BaseChannel):
     def tx(self):
         """RabbitMQ Tx Operations.
 
-        :rtype: Tx
+        :rtype: amqpstorm.tx.Tx
         """
         return self._tx
 
@@ -86,7 +86,7 @@ class Channel(BaseChannel):
     def queue(self):
         """RabbitMQ Queue Operations.
 
-        :rtype: Queue
+        :rtype: amqpstorm.queue.Queue
         """
         return self._queue
 

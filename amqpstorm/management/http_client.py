@@ -18,6 +18,10 @@ class HTTPClient(object):
         :param path: URI Path
         :param payload: HTTP Body
         :param headers: HTTP Headers
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :return: Response
         """
         return self._request('get', path, payload, headers)
@@ -28,6 +32,10 @@ class HTTPClient(object):
         :param path: URI Path
         :param payload: HTTP Body
         :param headers: HTTP Headers
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :return: Response
         """
         return self._request('post', path, payload, headers)
@@ -38,6 +46,10 @@ class HTTPClient(object):
         :param path: URI Path
         :param payload: HTTP Body
         :param headers: HTTP Headers
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :return: Response
         """
         return self._request('delete', path, payload, headers)
@@ -48,6 +60,10 @@ class HTTPClient(object):
         :param path: URI Path
         :param payload: HTTP Body
         :param headers: HTTP Headers
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :return: Response
         """
         return self._request('put', path, payload, headers)
@@ -59,6 +75,10 @@ class HTTPClient(object):
         :param path: URI Path
         :param payload: HTTP Body
         :param headers: HTTP Headers
+
+        :raises ApiError: Raises if the remote server encountered an error.
+        :raises ApiConnectionError: Raises if there was a connectivity issue.
+
         :return: Response
         """
         url = urlparse.urljoin(self._base_url, 'api/%s' % path)
@@ -81,6 +101,7 @@ class HTTPClient(object):
         """Get JSON output from the HTTP response.
 
         :param requests.Response response:
+
         :return: Json payload
         """
         try:
@@ -95,6 +116,9 @@ class HTTPClient(object):
 
         :param response: HTTP response
         :param json_response: Json response
+
+        :raises ApiError: Raises if the remote server encountered an error.
+
         :return:
         """
         status_code = response.status_code
