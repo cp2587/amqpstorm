@@ -122,7 +122,7 @@ class Exchange(ManagementHandler):
                                         exchange
                                     ))
 
-    def bind(self, source, destination, routing_key, virtual_host='/',
+    def bind(self, destination='', source='', routing_key='', virtual_host='/',
              arguments=None):
         """Bind an Exchange.
 
@@ -154,8 +154,8 @@ class Exchange(ManagementHandler):
                                      ),
                                      payload=bind_payload)
 
-    def unbind(self, source, destination, routing_key, virtual_host='/',
-               properties_key=None):
+    def unbind(self, destination='', source='', routing_key='',
+               virtual_host='/', properties_key=None):
         """Unbind an Exchange.
 
         :param str source: Source Exchange name

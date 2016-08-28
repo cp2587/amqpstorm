@@ -140,7 +140,7 @@ class Queue(ManagementHandler):
                                         queue
                                     ))
 
-    def bind(self, queue, exchange, routing_key, virtual_host='/',
+    def bind(self, queue='', exchange='', routing_key='', virtual_host='/',
              arguments=None):
         """Bind a Queue.
 
@@ -172,7 +172,7 @@ class Queue(ManagementHandler):
                                      ),
                                      payload=bind_payload)
 
-    def unbind(self, queue, exchange, routing_key, virtual_host='/',
+    def unbind(self, queue='', exchange='', routing_key='', virtual_host='/',
                properties_key=None):
         """Unbind a Queue.
 

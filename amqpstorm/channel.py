@@ -335,11 +335,15 @@ class Channel(BaseChannel):
         :return:
         """
         reply_text = try_utf8_decode(frame_in.reply_text)
-        message = ("Message not delivered: %s (%s) to queue '%s' "
-                   "from exchange '%s'" % (reply_text,
-                                           frame_in.reply_code,
-                                           frame_in.routing_key,
-                                           frame_in.exchange))
+        message = (
+            "Message not delivered: %s (%s) to queue '%s' from exchange '%s'" %
+            (
+                reply_text,
+                frame_in.reply_code,
+                frame_in.routing_key,
+                frame_in.exchange
+            )
+        )
         exception = AMQPMessageError(message,
                                      reply_code=frame_in.reply_code)
         self.exceptions.append(exception)
@@ -413,8 +417,13 @@ class Channel(BaseChannel):
         self.remove_consumer_tag()
         if frame_in.reply_code != 200:
             reply_text = try_utf8_decode(frame_in.reply_text)
-            message = 'Channel %d was closed by remote server: %s' % \
-                      (self._channel_id, reply_text)
+            message = (
+                'Channel %d was closed by remote server: %s' %
+                (
+                    self._channel_id,
+                    reply_text
+                )
+            )
             exception = AMQPChannelError(message,
                                          reply_code=frame_in.reply_code)
             self.exceptions.append(exception)
