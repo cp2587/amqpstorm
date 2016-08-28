@@ -93,12 +93,15 @@ class WebFunctionalTests(unittest.TestCase):
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
         api.virtual_host.create(vhost)
-        api.user.set_permission('guest', vhost)
+
+        api.config.set_virtual_host(vhost)
+
+        api.user.set_permission('guest')
 
         self.connection = Connection(HOST, USERNAME, PASSWORD,
                                      virtual_host=vhost)
         self.channel = self.connection.channel()
         self.channel.queue.declare(queue)
         self.channel.queue.delete(queue)
-        api.user.delete_permission('guest', vhost)
+        api.user.delete_permission('guest')
         api.virtual_host.delete(vhost)
