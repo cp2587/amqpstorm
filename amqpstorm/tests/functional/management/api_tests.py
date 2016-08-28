@@ -20,7 +20,7 @@ LOGGER = logging.getLogger(__name__)
 class ApiFunctionalTests(unittest.TestCase):
     def test_api_url_with_slash(self):
         api = ManagementApi(HTTP_URL + '/', USERNAME, PASSWORD)
-        self.assertEqual(api.aliveness_test(), {'status': 'ok'})
+        self.assertEqual(api.aliveness_test('/'), {'status': 'ok'})
 
     def test_api_with_invalid_url(self):
         api = ManagementApi('abc', USERNAME, PASSWORD)
@@ -28,7 +28,7 @@ class ApiFunctionalTests(unittest.TestCase):
             "Invalid URL"
         )
         self.assertRaisesRegexp(ApiConnectionError, expected_error,
-                                api.aliveness_test)
+                                api.aliveness_test, '/')
 
     def test_api_with_inaccessible(self):
         api = ManagementApi('http://192.168.1.50', USERNAME, PASSWORD,

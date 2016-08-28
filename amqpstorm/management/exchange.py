@@ -1,5 +1,6 @@
 import json
 
+from amqpstorm.compatibility import quote
 from amqpstorm.compatibility import urlparse
 from amqpstorm.management.base import ManagementHandler
 
@@ -12,7 +13,7 @@ API_EXCHANGE_UNBIND = 'bindings/%s/e/%s/e/%s/%s'
 
 
 class Exchange(ManagementHandler):
-    def get(self, exchange):
+    def get(self, exchange, virtual_host='/'):
         """Get Exchange details.
 
         :param str exchange: Exchange name
@@ -22,16 +23,18 @@ class Exchange(ManagementHandler):
 
         :rtype: dict
         """
-        return self.config.http_client.get(
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(
             API_EXCHANGE
             % (
-                self.config.virtual_host,
+                virtual_host,
                 exchange)
         )
 
-    def list(self, show_all=False):
+    def list(self, virtual_host='/', show_all=False):
         """List Exchanges.
 
+        :param str virtual_host: Virtual host name
         :param bool show_all: List all Exchanges
 
         :raises ApiError: Raises if the remote server encountered an error.
@@ -40,29 +43,32 @@ class Exchange(ManagementHandler):
         :rtype: list
         """
         if show_all:
-            return self.config.http_client.get(API_EXCHANGES)
-        return self.config.http_client.get(
-            API_EXCHANGES_VIRTUAL_HOST % self.config.virtual_host
+            return self.http_client.get(API_EXCHANGES)
+        return self.http_client.get(
+            API_EXCHANGES_VIRTUAL_HOST % virtual_host
         )
 
-    def declare(self, exchange='', exchange_type='direct', passive=False,
-                durable=False, auto_delete=False, arguments=None):
+    def declare(self, exchange='', exchange_type='direct', virtual_host='/',
+                passive=False, durable=False, auto_delete=False,
+                arguments=None):
         """Declare an Exchange.
 
         :param str exchange: Exchange name
         :param str exchange_type: Exchange type
+        :param str virtual_host: Virtual host name
         :param bool passive: Do not create
         :param bool durable: Durable exchange
         :param bool auto_delete: Automatically delete when not in use
-        :param dict arguments: Exchange key/value arguments
+        :param dict|None arguments: Exchange key/value arguments
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """
+        virtual_host = quote(virtual_host, '')
         if passive:
-            return self.get(exchange)
+            return self.get(exchange, virtual_host=virtual_host)
         exchange_payload = json.dumps(
             {
                 'durable': durable,
@@ -70,55 +76,61 @@ class Exchange(ManagementHandler):
                 'internal': False,
                 'type': exchange_type,
                 'arguments': arguments or {},
-                'vhost': urlparse.unquote(self.config.virtual_host)
+                'vhost': urlparse.unquote(virtual_host)
             }
         )
-        return self.config.http_client.put(API_EXCHANGE %
-                                           (
-                                               self.config.virtual_host,
-                                               exchange
-                                           ),
-                                           payload=exchange_payload)
+        return self.http_client.put(API_EXCHANGE %
+                                    (
+                                        virtual_host,
+                                        exchange
+                                    ),
+                                    payload=exchange_payload)
 
-    def delete(self, exchange):
+    def delete(self, exchange, virtual_host='/'):
         """Delete an Exchange.
 
         :param str exchange: Exchange name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
-        return self.config.http_client.delete(API_EXCHANGE %
-                                              (
-                                                  self.config.virtual_host,
-                                                  exchange
-                                              ))
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.delete(API_EXCHANGE %
+                                       (
+                                           virtual_host,
+                                           exchange
+                                       ))
 
-    def bindings(self, exchange):
+    def bindings(self, exchange, virtual_host='/'):
         """Get Exchange bindings.
 
         :param str exchange: Exchange name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
-        return self.config.http_client.get(API_EXCHANGE_BINDINGS %
-                                           (
-                                               self.config.virtual_host,
-                                               exchange
-                                           ))
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(API_EXCHANGE_BINDINGS %
+                                    (
+                                        virtual_host,
+                                        exchange
+                                    ))
 
-    def bind(self, source, destination, routing_key, arguments=None):
+    def bind(self, source, destination, routing_key, virtual_host='/',
+             arguments=None):
         """Bind an Exchange.
 
         :param str source: Source Exchange name
         :param str destination: Destination Exchange name
         :param str routing_key: The routing key to use
-        :param dict arguments: Bind key/value arguments
+        :param str virtual_host: Virtual host name
+        :param dict|None arguments: Bind key/value arguments
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
@@ -131,22 +143,25 @@ class Exchange(ManagementHandler):
             'routing_key': routing_key,
             'source': source,
             'arguments': arguments or {},
-            'vhost': self.config.virtual_host
+            'vhost': virtual_host
         })
-        return self.config.http_client.post(API_EXCHANGE_BIND %
-                                            (
-                                                self.config.virtual_host,
-                                                source,
-                                                destination
-                                            ),
-                                            payload=bind_payload)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.post(API_EXCHANGE_BIND %
+                                     (
+                                         virtual_host,
+                                         source,
+                                         destination
+                                     ),
+                                     payload=bind_payload)
 
-    def unbind(self, source, destination, routing_key, properties_key=None):
+    def unbind(self, source, destination, routing_key, virtual_host='/',
+               properties_key=None):
         """Unbind an Exchange.
 
         :param str source: Source Exchange name
         :param str destination: Destination Exchange name
         :param str routing_key: The routing key to use
+        :param str virtual_host: Virtual host name
         :param str properties_key:
 
         :raises ApiError: Raises if the remote server encountered an error.
@@ -159,13 +174,14 @@ class Exchange(ManagementHandler):
             'destination_type': 'e',
             'properties_key': properties_key or routing_key,
             'source': source,
-            'vhost': self.config.virtual_host
+            'vhost': virtual_host
         })
-        return self.config.http_client.delete(API_EXCHANGE_UNBIND %
-                                              (
-                                                  self.config.virtual_host,
-                                                  source,
-                                                  destination,
-                                                  properties_key or routing_key
-                                              ),
-                                              payload=unbind_payload)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.delete(API_EXCHANGE_UNBIND %
+                                       (
+                                           virtual_host,
+                                           source,
+                                           destination,
+                                           properties_key or routing_key
+                                       ),
+                                       payload=unbind_payload)

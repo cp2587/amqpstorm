@@ -88,20 +88,18 @@ class WebFunctionalTests(unittest.TestCase):
                                 self.connection.check_for_errors)
 
     def test_functional_alternative_virtual_host(self):
-        vhost = 'travis_ci'
+        vhost_name = 'travis_ci'
         queue = 'test_functional_alternative_virtual_host'
 
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
-        api.virtual_host.create(vhost)
+        api.virtual_host.create(vhost_name)
 
-        api.config.set_virtual_host(vhost)
-
-        api.user.set_permission('guest')
+        api.user.set_permission('guest', vhost_name)
 
         self.connection = Connection(HOST, USERNAME, PASSWORD,
-                                     virtual_host=vhost)
+                                     virtual_host=vhost_name)
         self.channel = self.connection.channel()
         self.channel.queue.declare(queue)
         self.channel.queue.delete(queue)
-        api.user.delete_permission('guest')
-        api.virtual_host.delete(vhost)
+        api.user.delete_permission('guest', vhost_name)
+        api.virtual_host.delete(vhost_name)

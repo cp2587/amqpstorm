@@ -8,6 +8,7 @@ from amqpstorm.management import ManagementApi
 
 class FakeClient(object):
     """Fake HTTP client for Unit-Testing."""
+
     def __init__(self, on_get):
         self.on_get = on_get
 
@@ -31,7 +32,7 @@ class ApiTests(unittest.TestCase):
                 }
 
         api = ManagementApi('url', 'guest', 'guest')
-        api.config.http_client = FakeClient(on_get)
+        api.http_client = FakeClient(on_get)
 
         top = api.top()
         self.assertIsInstance(top, list)

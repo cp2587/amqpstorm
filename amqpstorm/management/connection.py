@@ -18,7 +18,7 @@ class Connection(ManagementHandler):
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_CONNECTION % connection)
+        return self.http_client.get(API_CONNECTION % connection)
 
     def list(self):
         """Get Connections.
@@ -28,7 +28,7 @@ class Connection(ManagementHandler):
 
         :rtype: list
         """
-        return self.config.http_client.get(API_CONNECTIONS)
+        return self.http_client.get(API_CONNECTIONS)
 
     def close(self, connection, reason='Closed via management api'):
         """Close Connection.
@@ -47,8 +47,8 @@ class Connection(ManagementHandler):
             'reason': reason
         })
         connection = quote(connection, '')
-        return self.config.http_client.delete(API_CONNECTION % connection,
-                                              payload=close_payload,
-                                              headers={
-                                                  'X-Reason': reason
-                                              })
+        return self.http_client.delete(API_CONNECTION % connection,
+                                       payload=close_payload,
+                                       headers={
+                                           'X-Reason': reason
+                                       })

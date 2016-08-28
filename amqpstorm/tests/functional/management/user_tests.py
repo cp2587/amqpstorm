@@ -55,7 +55,7 @@ class ApiUserFunctionalTests(unittest.TestCase):
     def test_api_user_get_permission(self):
         api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
 
-        permission = api.user.get_permission('guest')
+        permission = api.user.get_permission('guest', '/')
         self.assertIsInstance(permission, dict)
         self.assertEqual(permission['read'], '.*')
         self.assertEqual(permission['write'], '.*')

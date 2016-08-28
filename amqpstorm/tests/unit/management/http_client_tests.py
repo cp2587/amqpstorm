@@ -11,6 +11,7 @@ from amqpstorm.management.http_client import HTTPClient
 
 class FakeResponse(object):
     """Fake Requests Response for Unit-Testing."""
+
     def __init__(self, status_code=200, json=None, raises=None):
         self.status_code = status_code
         self._json = json

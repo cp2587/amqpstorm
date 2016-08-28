@@ -2,7 +2,7 @@ Management Api
 --------------
 
 .. autoclass:: amqpstorm.management.ManagementApi
-    :members: basic, channel, connection, exchange, queue, user, virtual_host, aliveness_test, overview, nodes, top, whoami
+    :members: basic, channel, connection, exchange, queue, user, aliveness_test, overview, nodes, top, whoami
 
 .. autoclass:: amqpstorm.management.basic.Basic
     :members:

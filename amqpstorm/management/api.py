@@ -1,4 +1,4 @@
-from amqpstorm.management.base import Configuration
+from amqpstorm.compatibility import quote
 from amqpstorm.management.basic import Basic
 from amqpstorm.management.channel import Channel
 from amqpstorm.management.connection import Connection
@@ -16,25 +16,16 @@ API_TOP = 'top/%s'
 
 
 class ManagementApi(object):
-    def __init__(self, api_url, username, password, virtual_host='/',
-                 timeout=3):
-        http_client = HTTPClient(api_url, username, password, timeout=timeout)
-        self._config = Configuration(http_client, virtual_host)
-        self._basic = Basic(self.config)
-        self._channel = Channel(self.config)
-        self._connection = Connection(self.config)
-        self._exchange = Exchange(self.config)
-        self._queue = Queue(self.config)
-        self._user = User(self.config)
-        self._virtual_host = VirtualHost(self.config)
-
-    @property
-    def config(self):
-        """Management Api Configuration.
-
-        :rtype: amqpstorm.management.base.Configuration
-        """
-        return self._config
+    def __init__(self, api_url, username, password, timeout=3):
+        self.http_client = HTTPClient(api_url, username, password,
+                                      timeout=timeout)
+        self._basic = Basic(self.http_client)
+        self._channel = Channel(self.http_client)
+        self._connection = Connection(self.http_client)
+        self._exchange = Exchange(self.http_client)
+        self._queue = Queue(self.http_client)
+        self._user = User(self.http_client)
+        self._virtual_host = VirtualHost(self.http_client)
 
     @property
     def basic(self):
@@ -92,16 +83,19 @@ class ManagementApi(object):
         """
         return self._virtual_host
 
-    def aliveness_test(self):
+    def aliveness_test(self, virtual_host='/'):
         """Aliveness Test.
+
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_ALIVENESS_TEST %
-                                           self.config.virtual_host)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(API_ALIVENESS_TEST %
+                                    virtual_host)
 
     def overview(self):
         """Get Overview.
@@ -111,7 +105,7 @@ class ManagementApi(object):
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_OVERVIEW)
+        return self.http_client.get(API_OVERVIEW)
 
     def nodes(self):
         """Get Nodes.
@@ -121,7 +115,7 @@ class ManagementApi(object):
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_NODES)
+        return self.http_client.get(API_NODES)
 
     def top(self):
         """Top Processes.
@@ -133,7 +127,7 @@ class ManagementApi(object):
         """
         nodes = []
         for node in self.nodes():
-            nodes.append(self.config.http_client.get(API_TOP % node['name']))
+            nodes.append(self.http_client.get(API_TOP % node['name']))
         return nodes
 
     def whoami(self):
@@ -144,4 +138,4 @@ class ManagementApi(object):
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_WHOAMI)
+        return self.http_client.get(API_WHOAMI)

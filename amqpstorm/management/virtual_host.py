@@ -18,7 +18,7 @@ class VirtualHost(ManagementHandler):
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
-        return self.config.http_client.get(API_VIRTUAL_HOST % virtual_host)
+        return self.http_client.get(API_VIRTUAL_HOST % virtual_host)
 
     def list(self):
         """List all Virtual Hosts.
@@ -28,7 +28,7 @@ class VirtualHost(ManagementHandler):
 
         :rtype: list
         """
-        return self.config.http_client.get(API_VIRTUAL_HOSTS)
+        return self.http_client.get(API_VIRTUAL_HOSTS)
 
     def create(self, virtual_host):
         """Create a Virtual Host.
@@ -41,7 +41,7 @@ class VirtualHost(ManagementHandler):
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
-        return self.config.http_client.put(API_VIRTUAL_HOST % virtual_host)
+        return self.http_client.put(API_VIRTUAL_HOST % virtual_host)
 
     def delete(self, virtual_host):
         """Delete a Virtual Host.
@@ -54,7 +54,7 @@ class VirtualHost(ManagementHandler):
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
-        return self.config.http_client.delete(API_VIRTUAL_HOST % virtual_host)
+        return self.http_client.delete(API_VIRTUAL_HOST % virtual_host)
 
     def get_permissions(self, virtual_host):
         """Get all Virtual hosts permissions.
@@ -65,7 +65,7 @@ class VirtualHost(ManagementHandler):
         :rtype: dict
         """
         virtual_host = quote(virtual_host, '')
-        return self.config.http_client.get(API_VIRTUAL_HOSTS_PERMISSION %
-                                           (
-                                               virtual_host
-                                           ))
+        return self.http_client.get(API_VIRTUAL_HOSTS_PERMISSION %
+                                    (
+                                        virtual_host
+                                    ))

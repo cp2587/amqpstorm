@@ -43,10 +43,8 @@ class ApiUserFunctionalTests(unittest.TestCase):
             virtual_host = api.virtual_host.get(vhost_name)
             self.assertIsInstance(virtual_host, dict)
             self.assertEqual(virtual_host['name'], vhost_name)
-            
-            api.config.set_virtual_host(vhost_name)
 
-            api.user.set_permission('guest')
+            api.user.set_permission('guest', vhost_name)
         finally:
             api.virtual_host.delete(vhost_name)
 

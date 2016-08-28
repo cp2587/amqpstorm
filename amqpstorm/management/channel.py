@@ -15,7 +15,7 @@ class Channel(ManagementHandler):
 
         :rtype: dict
         """
-        return self.config.http_client.get(API_CHANNEL % channel)
+        return self.http_client.get(API_CHANNEL % channel)
 
     def list(self):
         """List all Channels.
@@ -25,4 +25,4 @@ class Channel(ManagementHandler):
 
         :rtype: list
         """
-        return self.config.http_client.get(API_CHANNELS)
+        return self.http_client.get(API_CHANNELS)

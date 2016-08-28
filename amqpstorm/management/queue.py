@@ -1,5 +1,6 @@
 import json
 
+from amqpstorm.compatibility import quote
 from amqpstorm.compatibility import urlparse
 from amqpstorm.management.base import ManagementHandler
 
@@ -13,26 +14,29 @@ API_QUEUE_UNBIND = 'bindings/%s/e/%s/q/%s/%s'
 
 
 class Queue(ManagementHandler):
-    def get(self, queue):
+    def get(self, queue, virtual_host='/'):
         """Get Queue details.
 
         :param queue: Queue name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
-        return self.config.http_client.get(
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(
             API_QUEUE % (
-                self.config.virtual_host,
+                virtual_host,
                 queue
             )
         )
 
-    def list(self, show_all=False):
+    def list(self, virtual_host='/', show_all=False):
         """List Queues.
 
+        :param str virtual_host: Virtual host name
         :param bool show_all: List all Queues
 
         :raises ApiError: Raises if the remote server encountered an error.
@@ -41,95 +45,110 @@ class Queue(ManagementHandler):
         :rtype: list
         """
         if show_all:
-            return self.config.http_client.get(API_QUEUES)
-        return self.config.http_client.get(
-            API_QUEUES_VIRTUAL_HOST % self.config.virtual_host
+            return self.http_client.get(API_QUEUES)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(
+            API_QUEUES_VIRTUAL_HOST % virtual_host
         )
 
-    def declare(self, queue='', passive=False, durable=False,
+    def declare(self, queue='', virtual_host='/', passive=False, durable=False,
                 auto_delete=False, arguments=None):
         """Declare a Queue.
 
         :param str queue: Queue name
+        :param str virtual_host: Virtual host name
         :param bool passive: Do not create
         :param bool durable: Durable queue
         :param bool auto_delete: Automatically delete when not in use
-        :param dict arguments: Queue key/value arguments
+        :param dict|None arguments: Queue key/value arguments
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
+        virtual_host = quote(virtual_host, '')
         if passive:
-            return self.get(queue)
+            return self.get(queue, virtual_host=virtual_host)
+
         queue_payload = json.dumps(
             {
                 'durable': durable,
                 'auto_delete': auto_delete,
                 'arguments': arguments or {},
-                'vhost': urlparse.unquote(self.config.virtual_host)
+                'vhost': urlparse.unquote(virtual_host)
             }
         )
-        return self.config.http_client.put(
-            API_QUEUE % (self.config.virtual_host, queue),
+        return self.http_client.put(
+            API_QUEUE % (
+                virtual_host,
+                queue
+            ),
             payload=queue_payload)
 
-    def delete(self, queue):
+    def delete(self, queue, virtual_host='/'):
         """Delete a Queue.
 
         :param str queue: Queue name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: dict
         """
-        return self.config.http_client.delete(API_QUEUE %
-                                              (
-                                                  self.config.virtual_host,
-                                                  queue
-                                              ))
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.delete(API_QUEUE %
+                                       (
+                                           virtual_host,
+                                           queue
+                                       ))
 
-    def purge(self, queue):
+    def purge(self, queue, virtual_host='/'):
         """Purge a Queue.
 
         :param str queue: Queue name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: None
         """
-        return self.config.http_client.delete(API_QUEUE_PURGE %
-                                              (
-                                                  self.config.virtual_host,
-                                                  queue
-                                              ))
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.delete(API_QUEUE_PURGE %
+                                       (
+                                           virtual_host,
+                                           queue
+                                       ))
 
-    def bindings(self, queue):
+    def bindings(self, queue, virtual_host='/'):
         """Get Queue bindings.
 
         :param str queue: Queue name
+        :param str virtual_host: Virtual host name
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
 
         :rtype: list
         """
-        return self.config.http_client.get(API_QUEUE_BINDINGS %
-                                           (
-                                               self.config.virtual_host,
-                                               queue
-                                           ))
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.get(API_QUEUE_BINDINGS %
+                                    (
+                                        virtual_host,
+                                        queue
+                                    ))
 
-    def bind(self, queue, exchange, routing_key, arguments=None):
+    def bind(self, queue, exchange, routing_key, virtual_host='/',
+             arguments=None):
         """Bind a Queue.
 
         :param str queue: Queue name
         :param str exchange: Exchange name
         :param str routing_key: The routing key to use
-        :param dict arguments: Bind key/value arguments
+        :param str virtual_host: Virtual host name
+        :param dict|None arguments: Bind key/value arguments
 
         :raises ApiError: Raises if the remote server encountered an error.
         :raises ApiConnectionError: Raises if there was a connectivity issue.
@@ -142,22 +161,25 @@ class Queue(ManagementHandler):
             'routing_key': routing_key,
             'source': exchange,
             'arguments': arguments or {},
-            'vhost': self.config.virtual_host
+            'vhost': virtual_host
         })
-        return self.config.http_client.post(API_QUEUE_BIND %
-                                            (
-                                                self.config.virtual_host,
-                                                exchange,
-                                                queue
-                                            ),
-                                            payload=bind_payload)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.post(API_QUEUE_BIND %
+                                     (
+                                         virtual_host,
+                                         exchange,
+                                         queue
+                                     ),
+                                     payload=bind_payload)
 
-    def unbind(self, queue, exchange, routing_key, properties_key=None):
+    def unbind(self, queue, exchange, routing_key, virtual_host='/',
+               properties_key=None):
         """Unbind a Queue.
 
         :param str queue: Queue name
         :param str exchange: Exchange name
         :param str routing_key: The routing key to use
+        :param str virtual_host: Virtual host name
         :param str properties_key:
 
         :raises ApiError: Raises if the remote server encountered an error.
@@ -170,13 +192,14 @@ class Queue(ManagementHandler):
             'destination_type': 'q',
             'properties_key': properties_key or routing_key,
             'source': exchange,
-            'vhost': self.config.virtual_host
+            'vhost': virtual_host
         })
-        return self.config.http_client.delete(API_QUEUE_UNBIND %
-                                              (
-                                                  self.config.virtual_host,
-                                                  exchange,
-                                                  queue,
-                                                  properties_key or routing_key
-                                              ),
-                                              payload=unbind_payload)
+        virtual_host = quote(virtual_host, '')
+        return self.http_client.delete(API_QUEUE_UNBIND %
+                                       (
+                                           virtual_host,
+                                           exchange,
+                                           queue,
+                                           properties_key or routing_key
+                                       ),
+                                       payload=unbind_payload)
