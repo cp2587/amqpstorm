@@ -1,4 +1,5 @@
 import logging
+import time
 
 try:
     import unittest2 as unittest
@@ -42,7 +43,7 @@ class ApiConnectionFunctionalTests(unittest.TestCase):
 
     def test_api_connection_close(self):
         reason = 'travis-ci'
-        api = ManagementApi(HTTP_URL, USERNAME, PASSWORD)
+        api = ManagementApi(HTTP_URL, USERNAME, PASSWORD, timeout=1)
 
         connection = Connection(HOST, USERNAME, PASSWORD)
         self.assertEqual(len(api.connection.list()), 1)
@@ -50,8 +51,13 @@ class ApiConnectionFunctionalTests(unittest.TestCase):
         for conn in api.connection.list():
             self.assertEqual(api.connection.close(conn['name'],
                                                   reason=reason), None)
-        error_message = ('Connection was closed by remote server: '
-                         'CONNECTION_FORCED - %s' % reason)
+
+        time.sleep(1)
+
+        error_message = (
+            'Connection was closed by remote server: CONNECTION_FORCED - %s' %
+            reason
+        )
         self.assertRaisesRegexp(AMQPConnectionError, error_message,
                                 connection.check_for_errors)
 
