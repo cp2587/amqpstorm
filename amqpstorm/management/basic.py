@@ -51,7 +51,7 @@ class Basic(ManagementHandler):
         :param str virtual_host: Virtual host name
         :param bool requeue: Re-queue message
         :param bool to_dict: Should incoming messages be converted to a
-                    dictionary before delivery.
+                             dictionary before delivery.
         :param int count: How many messages should we try to fetch.
         :param int truncate: The maximum length in bytes, beyond that the
                              server will truncate the message.
